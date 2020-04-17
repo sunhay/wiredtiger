@@ -51,7 +51,6 @@ esac
 for f in $search; do
 	cat "$f" | \
             clang-format --fallback-style=none | \
-            python dist/s_goto.py | \
             python dist/s_comment.py > "$t" || exit 1
 	cmp --silent "$f" "$t"
 	if test $? -ne 0; then
