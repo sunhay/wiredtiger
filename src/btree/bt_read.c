@@ -203,7 +203,7 @@ __wt_page_in_func(WT_SESSION_IMPL *session, WT_REF *ref, uint32_t flags
   ,
   const char *func, int line
 #endif
-  )
+)
 {
     WT_BTREE *btree;
     WT_DECL_RET;
@@ -219,7 +219,8 @@ __wt_page_in_func(WT_SESSION_IMPL *session, WT_REF *ref, uint32_t flags
         LF_SET(WT_READ_IGNORE_CACHE_SIZE);
 
     /* Sanity check flag combinations. */
-    WT_ASSERT(session, !LF_ISSET(WT_READ_DELETED_SKIP | WT_READ_NO_WAIT) ||
+    WT_ASSERT(session,
+      !LF_ISSET(WT_READ_DELETED_SKIP | WT_READ_NO_WAIT) ||
         LF_ISSET(WT_READ_CACHE | WT_READ_CACHE_LEAF));
     WT_ASSERT(session, !LF_ISSET(WT_READ_DELETED_CHECK) || !LF_ISSET(WT_READ_DELETED_SKIP));
 

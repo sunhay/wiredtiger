@@ -582,7 +582,7 @@ __curjoin_entry_member(
 
     if (entry->subjoin == NULL && iter != NULL &&
       (iter->end_pos + iter->end_skip >= entry->ends_next ||
-          (iter->end_skip > 0 && F_ISSET(entry, WT_CURJOIN_ENTRY_DISJUNCTION))))
+        (iter->end_skip > 0 && F_ISSET(entry, WT_CURJOIN_ENTRY_DISJUNCTION))))
         return (0); /* no checks to make */
 
     entry->stats.membership_check++;
@@ -1346,9 +1346,10 @@ __wt_curjoin_join(WT_SESSION_IMPL *session, WT_CURSOR_JOIN *cjoin, WT_INDEX *idx
     } else {
         /* Merge the join into an existing entry for this index */
         if (count != 0 && entry->count != 0 && entry->count != count)
-            WT_RET_MSG(session, EINVAL, "count=%" PRIu64
-                                        " does not match "
-                                        "previous count=%" PRIu64 " for this index",
+            WT_RET_MSG(session, EINVAL,
+              "count=%" PRIu64
+              " does not match "
+              "previous count=%" PRIu64 " for this index",
               count, entry->count);
         if (LF_MASK(WT_CURJOIN_ENTRY_BLOOM) != F_MASK(entry, WT_CURJOIN_ENTRY_BLOOM))
             WT_RET_MSG(session, EINVAL,
@@ -1384,7 +1385,7 @@ __wt_curjoin_join(WT_SESSION_IMPL *session, WT_CURSOR_JOIN *cjoin, WT_INDEX *idx
                   ((range & WT_CURJOIN_END_GT) != 0 || range_eq)) ||
               (F_ISSET(end, WT_CURJOIN_END_LT) && ((range & WT_CURJOIN_END_LT) != 0 || range_eq)) ||
               (endrange == WT_CURJOIN_END_EQ &&
-                  (range & (WT_CURJOIN_END_LT | WT_CURJOIN_END_GT)) != 0))
+                (range & (WT_CURJOIN_END_LT | WT_CURJOIN_END_GT)) != 0))
                 WT_RET_MSG(session, EINVAL, "join has overlapping ranges");
             if (range == WT_CURJOIN_END_EQ && endrange == WT_CURJOIN_END_EQ &&
               !F_ISSET(entry, WT_CURJOIN_ENTRY_DISJUNCTION))
@@ -1395,9 +1396,10 @@ __wt_curjoin_join(WT_SESSION_IMPL *session, WT_CURSOR_JOIN *cjoin, WT_INDEX *idx
             /*
              * Sort "gt"/"ge" to the front, followed by any number of "eq", and finally "lt"/"le".
              */
-            if (!hasins && ((range & WT_CURJOIN_END_GT) != 0 ||
-                             (range == WT_CURJOIN_END_EQ && endrange != WT_CURJOIN_END_EQ &&
-                               !F_ISSET(end, WT_CURJOIN_END_GT)))) {
+            if (!hasins &&
+              ((range & WT_CURJOIN_END_GT) != 0 ||
+                (range == WT_CURJOIN_END_EQ && endrange != WT_CURJOIN_END_EQ &&
+                  !F_ISSET(end, WT_CURJOIN_END_GT)))) {
                 ins = i;
                 hasins = true;
             }

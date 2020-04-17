@@ -181,7 +181,8 @@ __wt_bt_write(WT_SESSION_IMPL *session, WT_ITEM *buf, uint8_t *addr, size_t *add
     time_start = time_stop = 0;
 
     /* Checkpoint calls are different than standard calls. */
-    WT_ASSERT(session, (!checkpoint && addr != NULL && addr_sizep != NULL) ||
+    WT_ASSERT(session,
+      (!checkpoint && addr != NULL && addr_sizep != NULL) ||
         (checkpoint && addr == NULL && addr_sizep == NULL));
 
     /* In-memory databases shouldn't write pages. */

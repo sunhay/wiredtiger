@@ -906,8 +906,8 @@ compare:
                       last.start_txn == start_txn && last.stop_durable_ts == stop_durable_ts &&
                       last.stop_ts == stop_ts && last.stop_txn == stop_txn) &&
                   ((deleted && last.deleted) ||
-                      (!deleted && !last.deleted && last.value->size == size &&
-                        memcmp(last.value->data, data, size) == 0))) {
+                    (!deleted && !last.deleted && last.value->size == size &&
+                      memcmp(last.value->data, data, size) == 0))) {
                     /*
                      * The start time pair for deleted keys must be (WT_TS_NONE, WT_TXN_NONE) and
                      * stop time pair must be (WT_TS_MAX, WT_TXN_MAX) since we no longer select
@@ -1022,10 +1022,10 @@ compare:
                      * tombstone to write to disk and the deletion of the keys must be globally
                      * visible.
                      */
-                    WT_ASSERT(session, last.start_durable_ts == WT_TS_NONE &&
-                        last.start_ts == WT_TS_NONE && last.start_txn == WT_TXN_NONE &&
-                        last.stop_durable_ts == WT_TS_NONE && last.stop_ts == WT_TS_MAX &&
-                        last.stop_txn == WT_TXN_MAX);
+                    WT_ASSERT(session,
+                      last.start_durable_ts == WT_TS_NONE && last.start_ts == WT_TS_NONE &&
+                        last.start_txn == WT_TXN_NONE && last.stop_durable_ts == WT_TS_NONE &&
+                        last.stop_ts == WT_TS_MAX && last.stop_txn == WT_TXN_MAX);
                     /*
                      * The record adjustment is decremented by one so we can naturally fall into the
                      * RLE accounting below, where we increment rle by one, then continue in the
@@ -1107,19 +1107,20 @@ compare:
                       last.start_txn == start_txn && last.stop_durable_ts == stop_durable_ts &&
                       last.stop_ts == stop_ts && last.stop_txn == stop_txn) &&
                   ((deleted && last.deleted) ||
-                      (!deleted && !last.deleted && last.value->size == size &&
-                        memcmp(last.value->data, data, size) == 0))) {
+                    (!deleted && !last.deleted && last.value->size == size &&
+                      memcmp(last.value->data, data, size) == 0))) {
                     /*
                      * The start time pair for deleted keys must be (WT_TS_NONE, WT_TXN_NONE) and
                      * stop time pair must be (WT_TS_MAX, WT_TXN_MAX) since we no longer select
                      * tombstone to write to disk and the deletion of the keys must be globally
                      * visible.
                      */
-                    WT_ASSERT(session, (!deleted && !last.deleted) ||
+                    WT_ASSERT(session,
+                      (!deleted && !last.deleted) ||
                         (last.start_durable_ts == start_durable_ts && last.start_ts == WT_TS_NONE &&
-                                         last.start_txn == WT_TXN_NONE &&
-                                         last.stop_durable_ts == stop_durable_ts &&
-                                         last.stop_ts == WT_TS_MAX && last.stop_txn == WT_TXN_MAX));
+                          last.start_txn == WT_TXN_NONE &&
+                          last.stop_durable_ts == stop_durable_ts && last.stop_ts == WT_TS_MAX &&
+                          last.stop_txn == WT_TXN_MAX));
                     ++rle;
                     goto next;
                 }
@@ -1158,10 +1159,10 @@ compare:
             last.deleted = deleted;
             rle = 1;
 
-        /*
-         * Move to the next record. It's not a simple increment because if it's the maximum record,
-         * incrementing it wraps to 0 and this turns into an infinite loop.
-         */
+            /*
+             * Move to the next record. It's not a simple increment because if it's the maximum
+             * record, incrementing it wraps to 0 and this turns into an infinite loop.
+             */
 next:
             if (src_recno == UINT64_MAX)
                 break;

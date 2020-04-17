@@ -1422,8 +1422,9 @@ __conn_config_file(
     WT_ERR(__conn_config_check_version(session, cbuf->data));
 
     /* Check the configuration information. */
-    WT_ERR(__wt_config_check(session, is_user ? WT_CONFIG_REF(session, wiredtiger_open_usercfg) :
-                                                WT_CONFIG_REF(session, wiredtiger_open_basecfg),
+    WT_ERR(__wt_config_check(session,
+      is_user ? WT_CONFIG_REF(session, wiredtiger_open_usercfg) :
+                WT_CONFIG_REF(session, wiredtiger_open_basecfg),
       cbuf->data, 0));
 
     /* Append it to the stack. */
@@ -1911,14 +1912,15 @@ __wt_verbose_dump_sessions(WT_SESSION_IMPL *session, bool show_cursors)
               session, "  Current dhandle: %s", s->dhandle == NULL ? "NONE" : s->dhandle->name));
             WT_ERR(
               __wt_msg(session, "  Backup in progress: %s", s->bkp_cursor == NULL ? "no" : "yes"));
-            WT_ERR(__wt_msg(session, "  Compact state: %s", s->compact_state == WT_COMPACT_NONE ?
+            WT_ERR(__wt_msg(session, "  Compact state: %s",
+              s->compact_state == WT_COMPACT_NONE ?
                 "none" :
                 (s->compact_state == WT_COMPACT_RUNNING ? "running" : "success")));
             WT_ERR(__wt_msg(session, "  Flags: 0x%" PRIx32, s->flags));
-            WT_ERR(
-              __wt_msg(session, "  Isolation level: %s", s->isolation == WT_ISO_READ_COMMITTED ?
-                  "read-committed" :
-                  (s->isolation == WT_ISO_READ_UNCOMMITTED ? "read-uncommitted" : "snapshot")));
+            WT_ERR(__wt_msg(session, "  Isolation level: %s",
+              s->isolation == WT_ISO_READ_COMMITTED ?
+                "read-committed" :
+                (s->isolation == WT_ISO_READ_UNCOMMITTED ? "read-uncommitted" : "snapshot")));
             WT_ERR(__wt_msg(session, "  Transaction:"));
             WT_ERR(__wt_verbose_dump_txn_one(session, s, 0, NULL));
         } else {
@@ -2104,7 +2106,7 @@ __conn_write_base_config(WT_SESSION_IMPL *session, const char *cfg[])
     ret = __wt_sync_and_rename(session, &fs, WT_BASECONFIG_SET, WT_BASECONFIG);
 
     if (0) {
-    /* Close open file handle, remove any temporary file. */
+        /* Close open file handle, remove any temporary file. */
 err:
         WT_TRET(__wt_fclose(session, &fs));
         WT_TRET(__wt_remove_if_exists(session, WT_BASECONFIG_SET, false));

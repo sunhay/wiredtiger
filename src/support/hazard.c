@@ -66,7 +66,7 @@ __wt_hazard_set_func(WT_SESSION_IMPL *session, WT_REF *ref, bool *busyp
   ,
   const char *func, int line
 #endif
-  )
+)
 {
     WT_HAZARD *hp;
     uint8_t current_state;
@@ -89,7 +89,8 @@ __wt_hazard_set_func(WT_SESSION_IMPL *session, WT_REF *ref, bool *busyp
 
     /* If we have filled the current hazard pointer array, grow it. */
     if (session->nhazard >= session->hazard_size) {
-        WT_ASSERT(session, session->nhazard == session->hazard_size &&
+        WT_ASSERT(session,
+          session->nhazard == session->hazard_size &&
             session->hazard_inuse == session->hazard_size);
         WT_RET(hazard_grow(session));
     }
@@ -98,11 +99,13 @@ __wt_hazard_set_func(WT_SESSION_IMPL *session, WT_REF *ref, bool *busyp
      * If there are no available hazard pointer slots, make another one visible.
      */
     if (session->nhazard >= session->hazard_inuse) {
-        WT_ASSERT(session, session->nhazard == session->hazard_inuse &&
+        WT_ASSERT(session,
+          session->nhazard == session->hazard_inuse &&
             session->hazard_inuse < session->hazard_size);
         hp = &session->hazard[session->hazard_inuse++];
     } else {
-        WT_ASSERT(session, session->nhazard < session->hazard_inuse &&
+        WT_ASSERT(session,
+          session->nhazard < session->hazard_inuse &&
             session->hazard_inuse <= session->hazard_size);
 
         /*

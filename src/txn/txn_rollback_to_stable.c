@@ -34,7 +34,8 @@ __rollback_abort_newer_update(WT_SESSION_IMPL *session, WT_UPDATE *first_upd,
              * is not configured for key consistency check, the timestamps could be out of order
              * here.
              */
-            WT_ASSERT(session, !FLD_ISSET(S2BT(session)->assert_flags, WT_ASSERT_COMMIT_TS_KEYS) ||
+            WT_ASSERT(session,
+              !FLD_ISSET(S2BT(session)->assert_flags, WT_ASSERT_COMMIT_TS_KEYS) ||
                 upd == first_upd);
             first_upd = upd->next;
 
@@ -293,8 +294,9 @@ __rollback_row_ondisk_fixup_key(WT_SESSION_IMPL *session, WT_PAGE *page, WT_ROW 
             upd->txnid = WT_TXN_NONE;
             upd->durable_ts = durable_ts;
             upd->start_ts = hs_start_ts;
-            __wt_verbose(session, WT_VERB_RTS, "update restored from history store (txnid: %" PRIu64
-                                               ", start_ts: %s, durable_ts: %s",
+            __wt_verbose(session, WT_VERB_RTS,
+              "update restored from history store (txnid: %" PRIu64
+              ", start_ts: %s, durable_ts: %s",
               upd->txnid, __wt_timestamp_to_string(upd->start_ts, ts_string[0]),
               __wt_timestamp_to_string(upd->durable_ts, ts_string[1]));
 
@@ -512,7 +514,7 @@ __rollback_abort_row_reconciled_page(
 
     if (mod->rec_result == WT_PM_REC_REPLACE &&
       (mod->mod_replace.newest_start_durable_ts > rollback_timestamp ||
-          mod->mod_replace.newest_stop_durable_ts > rollback_timestamp)) {
+        mod->mod_replace.newest_stop_durable_ts > rollback_timestamp)) {
         __wt_verbose(session, WT_VERB_RTS,
           "reconciled replace block page history store update removal On-disk with start "
           "durable timestamp: %s, stop durable timestamp: %s and stable timestamp: %s",

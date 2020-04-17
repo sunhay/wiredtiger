@@ -610,7 +610,7 @@ __evict_update_work(WT_SESSION_IMPL *session)
      */
     if (__wt_cache_stuck(session) ||
       (__wt_cache_hs_score(cache) > 80 &&
-          dirty_inuse > (uint64_t)((dirty_target + dirty_trigger) * bytes_max) / 200))
+        dirty_inuse > (uint64_t)((dirty_target + dirty_trigger) * bytes_max) / 200))
         LF_SET(WT_CACHE_EVICT_HS);
 
     /*
@@ -1518,7 +1518,7 @@ retry:
      */
     if (slot < max_entries &&
       (retries < 2 ||
-          (retries < WT_RETRY_MAX && (slot == queue->evict_entries || slot > start_slot)))) {
+        (retries < WT_RETRY_MAX && (slot == queue->evict_entries || slot > start_slot)))) {
         start_slot = slot;
         ++retries;
         goto retry;
@@ -1905,7 +1905,7 @@ __evict_walk_tree(WT_SESSION_IMPL *session, WT_EVICT_QUEUE *queue, u_int max_ent
         if (F_ISSET(cache, WT_CACHE_EVICT_CLEAN_HARD) && F_ISSET(ref, WT_REF_FLAG_LEAF) &&
           !modified && page->modify != NULL &&
           !__wt_txn_visible_all(
-              session, page->modify->rec_max_txn, page->modify->rec_max_timestamp)) {
+            session, page->modify->rec_max_txn, page->modify->rec_max_timestamp)) {
             __wt_page_modify_set(session, page);
             goto fast;
         }
@@ -2078,7 +2078,7 @@ __evict_get_ref(WT_SESSION_IMPL *session, bool is_server, WT_BTREE **btreep, WT_
       !__evict_queue_full(cache->evict_current_queue) &&
       !__evict_queue_full(cache->evict_fill_queue) &&
       (cache->evict_empty_score > WT_EVICT_SCORE_CUTOFF ||
-          __evict_queue_empty(cache->evict_fill_queue, false)))
+        __evict_queue_empty(cache->evict_fill_queue, false)))
         return (WT_NOTFOUND);
 
     __wt_spin_lock(session, &cache->evict_queue_lock);

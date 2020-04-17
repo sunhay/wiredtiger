@@ -34,7 +34,8 @@ __rec_update_save(WT_SESSION_IMPL *session, WT_RECONCILE *r, WT_INSERT *ins, voi
     /* If nothing is committed, we must restore the update chain. */
     WT_ASSERT(session, onpage_upd != NULL || supd_restore);
     /* We can only write a standard update or a modify to the data store. */
-    WT_ASSERT(session, onpage_upd == NULL || onpage_upd->type == WT_UPDATE_STANDARD ||
+    WT_ASSERT(session,
+      onpage_upd == NULL || onpage_upd->type == WT_UPDATE_STANDARD ||
         onpage_upd->type == WT_UPDATE_MODIFY);
 
     WT_RET(__wt_realloc_def(session, &r->supd_allocated, r->supd_next + 1, &r->supd));
@@ -240,8 +241,9 @@ __wt_rec_upd_select(WT_SESSION_IMPL *session, WT_RECONCILE *r, WT_INSERT *ins, v
          * check is not required for history store updates as they are implicitly committed. As
          * prepared transaction IDs are globally visible, need to check the update state as well.
          */
-        if (!is_hs_page && (F_ISSET(r, WT_REC_VISIBLE_ALL) ? WT_TXNID_LE(r->last_running, txnid) :
-                                                             !__txn_visible_id(session, txnid))) {
+        if (!is_hs_page &&
+          (F_ISSET(r, WT_REC_VISIBLE_ALL) ? WT_TXNID_LE(r->last_running, txnid) :
+                                            !__txn_visible_id(session, txnid))) {
             has_newer_updates = true;
             continue;
         }
@@ -295,8 +297,8 @@ __wt_rec_upd_select(WT_SESSION_IMPL *session, WT_RECONCILE *r, WT_INSERT *ins, v
      * The checkpoint transaction is special. Make sure we never write metadata updates from a
      * checkpoint in a concurrent session.
      */
-    WT_ASSERT(session, !WT_IS_METADATA(session->dhandle) || upd == NULL ||
-        upd->txnid == WT_TXN_NONE ||
+    WT_ASSERT(session,
+      !WT_IS_METADATA(session->dhandle) || upd == NULL || upd->txnid == WT_TXN_NONE ||
         upd->txnid != S2C(session)->txn_global.checkpoint_txn_shared.id ||
         WT_SESSION_IS_CHECKPOINT(session));
 
@@ -406,7 +408,7 @@ __wt_rec_upd_select(WT_SESSION_IMPL *session, WT_RECONCILE *r, WT_INSERT *ins, v
      */
     if (upd_select->stop_ts < upd_select->start_ts ||
       (upd_select->stop_ts == upd_select->start_ts &&
-          upd_select->stop_txn < upd_select->start_txn)) {
+        upd_select->stop_txn < upd_select->start_txn)) {
         char ts_string[2][WT_TS_INT_STRING_SIZE];
         __wt_verbose(session, WT_VERB_TIMESTAMP,
           "Warning: fixing out-of-order timestamps remove at %s earlier than value at %s",
@@ -448,7 +450,7 @@ __wt_rec_upd_select(WT_SESSION_IMPL *session, WT_RECONCILE *r, WT_INSERT *ins, v
          */
         supd_restore = F_ISSET(r, WT_REC_EVICT) &&
           (has_newer_updates || F_ISSET(S2C(session), WT_CONN_IN_MEMORY) ||
-                         page->type == WT_PAGE_COL_FIX);
+            page->type == WT_PAGE_COL_FIX);
         if (supd_restore)
             r->cache_write_restore = true;
         WT_ERR(__rec_update_save(session, r, ins, ripcip,

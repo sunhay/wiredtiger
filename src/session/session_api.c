@@ -133,9 +133,10 @@ __wt_session_copy_values(WT_SESSION_IMPL *session)
              * checkpoint.
              */
             WT_TXN_SHARED *txn_shared = WT_SESSION_TXN_SHARED(session);
-            WT_ASSERT(session, txn_shared->pinned_id != WT_TXN_NONE ||
+            WT_ASSERT(session,
+              txn_shared->pinned_id != WT_TXN_NONE ||
                 (WT_PREFIX_MATCH(cursor->uri, "file:") &&
-                                 F_ISSET((WT_CURSOR_BTREE *)cursor, WT_CBT_NO_TXN)));
+                  F_ISSET((WT_CURSOR_BTREE *)cursor, WT_CBT_NO_TXN)));
 #endif
             WT_RET(__cursor_localvalue(cursor));
         }
@@ -866,8 +867,9 @@ __session_rebalance(WT_SESSION *wt_session, const char *uri, const char *config)
 
     /* Block out checkpoints to avoid spurious EBUSY errors. */
     WT_WITH_CHECKPOINT_LOCK(session,
-      WT_WITH_SCHEMA_LOCK(session, ret = __wt_schema_worker(session, uri, __wt_bt_rebalance, NULL,
-                                     cfg, WT_DHANDLE_EXCLUSIVE | WT_BTREE_REBALANCE)));
+      WT_WITH_SCHEMA_LOCK(session,
+        ret = __wt_schema_worker(
+          session, uri, __wt_bt_rebalance, NULL, cfg, WT_DHANDLE_EXCLUSIVE | WT_BTREE_REBALANCE)));
 
 err:
     if (ret != 0)
@@ -917,8 +919,8 @@ __session_rename(WT_SESSION *wt_session, const char *uri, const char *newuri, co
     WT_ERR(__wt_str_name_check(session, newuri));
 
     WT_WITH_CHECKPOINT_LOCK(session,
-      WT_WITH_SCHEMA_LOCK(session, WT_WITH_TABLE_WRITE_LOCK(session,
-                                     ret = __wt_schema_rename(session, uri, newuri, cfg))));
+      WT_WITH_SCHEMA_LOCK(session,
+        WT_WITH_TABLE_WRITE_LOCK(session, ret = __wt_schema_rename(session, uri, newuri, cfg))));
 err:
     if (ret != 0)
         WT_STAT_CONN_INCR(session, session_table_rename_fail);
@@ -1013,21 +1015,22 @@ __session_drop(WT_SESSION *wt_session, const char *uri, const char *config)
      */
     if (checkpoint_wait) {
         if (lock_wait)
-            WT_WITH_CHECKPOINT_LOCK(
-              session, WT_WITH_SCHEMA_LOCK(session, WT_WITH_TABLE_WRITE_LOCK(session,
-                                                      ret = __wt_schema_drop(session, uri, cfg))));
+            WT_WITH_CHECKPOINT_LOCK(session,
+              WT_WITH_SCHEMA_LOCK(session,
+                WT_WITH_TABLE_WRITE_LOCK(session, ret = __wt_schema_drop(session, uri, cfg))));
         else
-            WT_WITH_CHECKPOINT_LOCK_NOWAIT(
-              session, ret, WT_WITH_SCHEMA_LOCK_NOWAIT(
-                              session, ret, WT_WITH_TABLE_WRITE_LOCK_NOWAIT(session, ret,
-                                              ret = __wt_schema_drop(session, uri, cfg))));
+            WT_WITH_CHECKPOINT_LOCK_NOWAIT(session, ret,
+              WT_WITH_SCHEMA_LOCK_NOWAIT(session, ret,
+                WT_WITH_TABLE_WRITE_LOCK_NOWAIT(
+                  session, ret, ret = __wt_schema_drop(session, uri, cfg))));
     } else {
         if (lock_wait)
             WT_WITH_SCHEMA_LOCK(session,
               WT_WITH_TABLE_WRITE_LOCK(session, ret = __wt_schema_drop(session, uri, cfg)));
         else
-            WT_WITH_SCHEMA_LOCK_NOWAIT(session, ret, WT_WITH_TABLE_WRITE_LOCK_NOWAIT(session, ret,
-                                                       ret = __wt_schema_drop(session, uri, cfg)));
+            WT_WITH_SCHEMA_LOCK_NOWAIT(session, ret,
+              WT_WITH_TABLE_WRITE_LOCK_NOWAIT(
+                session, ret, ret = __wt_schema_drop(session, uri, cfg)));
     }
 
 err:
@@ -1266,9 +1269,10 @@ __session_salvage(WT_SESSION *wt_session, const char *uri, const char *config)
     WT_ERR(__wt_inmem_unsupported_op(session, NULL));
 
     /* Block out checkpoints to avoid spurious EBUSY errors. */
-    WT_WITH_CHECKPOINT_LOCK(
-      session, WT_WITH_SCHEMA_LOCK(session, ret = __wt_schema_worker(session, uri, __wt_salvage,
-                                              NULL, cfg, WT_DHANDLE_EXCLUSIVE | WT_BTREE_SALVAGE)));
+    WT_WITH_CHECKPOINT_LOCK(session,
+      WT_WITH_SCHEMA_LOCK(session,
+        ret = __wt_schema_worker(
+          session, uri, __wt_salvage, NULL, cfg, WT_DHANDLE_EXCLUSIVE | WT_BTREE_SALVAGE)));
 
 err:
     if (ret != 0)
@@ -1529,9 +1533,10 @@ __session_upgrade(WT_SESSION *wt_session, const char *uri, const char *config)
     WT_ERR(__wt_inmem_unsupported_op(session, NULL));
 
     /* Block out checkpoints to avoid spurious EBUSY errors. */
-    WT_WITH_CHECKPOINT_LOCK(
-      session, WT_WITH_SCHEMA_LOCK(session, ret = __wt_schema_worker(session, uri, __wt_upgrade,
-                                              NULL, cfg, WT_DHANDLE_EXCLUSIVE | WT_BTREE_UPGRADE)));
+    WT_WITH_CHECKPOINT_LOCK(session,
+      WT_WITH_SCHEMA_LOCK(session,
+        ret = __wt_schema_worker(
+          session, uri, __wt_upgrade, NULL, cfg, WT_DHANDLE_EXCLUSIVE | WT_BTREE_UPGRADE)));
 
 err:
     API_END_RET_NOTFOUND_MAP(session, ret);
@@ -1593,8 +1598,9 @@ __session_verify(WT_SESSION *wt_session, const char *uri, const char *config)
           WT_WITH_SCHEMA_LOCK(session, ret = __wt_verify_history_store_tree(session, NULL)));
     } else {
         WT_WITH_CHECKPOINT_LOCK(session,
-          WT_WITH_SCHEMA_LOCK(session, ret = __wt_schema_worker(session, uri, __wt_verify, NULL,
-                                         cfg, WT_DHANDLE_EXCLUSIVE | WT_BTREE_VERIFY)));
+          WT_WITH_SCHEMA_LOCK(session,
+            ret = __wt_schema_worker(
+              session, uri, __wt_verify, NULL, cfg, WT_DHANDLE_EXCLUSIVE | WT_BTREE_VERIFY)));
         WT_ERR(ret);
         /* TODO: WT-5643 Add history store verification for non file URI */
         if (WT_PREFIX_MATCH(uri, "file:"))
@@ -2084,9 +2090,10 @@ __open_session(WT_CONNECTION_IMPL *conn, WT_EVENT_HANDLER *event_handler, const 
         if (!session_ret->active)
             break;
     if (i == conn->session_size)
-        WT_ERR_MSG(session, WT_ERROR, "out of sessions, configured for %" PRIu32
-                                      " (including "
-                                      "internal sessions)",
+        WT_ERR_MSG(session, WT_ERROR,
+          "out of sessions, configured for %" PRIu32
+          " (including "
+          "internal sessions)",
           conn->session_size);
 
     /*

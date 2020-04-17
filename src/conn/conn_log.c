@@ -230,8 +230,9 @@ __logmgr_config(WT_SESSION_IMPL *session, const char **cfg, bool *runp, bool rec
      *
      * See above: should never happen.
      */
-    if (reconfig && ((enabled && !FLD_ISSET(conn->log_flags, WT_CONN_LOG_ENABLED)) ||
-                      (!enabled && FLD_ISSET(conn->log_flags, WT_CONN_LOG_ENABLED))))
+    if (reconfig &&
+      ((enabled && !FLD_ISSET(conn->log_flags, WT_CONN_LOG_ENABLED)) ||
+        (!enabled && FLD_ISSET(conn->log_flags, WT_CONN_LOG_ENABLED))))
         WT_RET_MSG(session, EINVAL,
           "log manager reconfigure: enabled mismatch with existing "
           "setting");
@@ -426,7 +427,7 @@ __log_archive_once(WT_SESSION_IMPL *session, uint32_t backup_file)
 
     if (0)
 err:
-    __wt_err(session, ret, "log archive server error");
+        __wt_err(session, ret, "log archive server error");
     WT_TRET(__wt_fs_directory_list_free(session, &logfiles, logcount));
     return (ret);
 }
@@ -490,7 +491,7 @@ __log_prealloc_once(WT_SESSION_IMPL *session)
 
     if (0)
 err:
-    __wt_err(session, ret, "log pre-alloc server error");
+        __wt_err(session, ret, "log pre-alloc server error");
     WT_TRET(__wt_fs_directory_list_free(session, &recfiles, reccount));
     return (ret);
 }
@@ -591,8 +592,8 @@ __log_file_server(void *arg)
                  */
                 if (!conn->hot_backup && conn->log_cursors == 0) {
                     WT_WITH_HOTBACKUP_READ_LOCK(session,
-                      WT_ERR_ERROR_OK(__wt_ftruncate(session, close_fh, close_end_lsn.l.offset),
-                                                  ENOTSUP, false),
+                      WT_ERR_ERROR_OK(
+                        __wt_ftruncate(session, close_fh, close_end_lsn.l.offset), ENOTSUP, false),
                       NULL);
                 }
                 WT_SET_LSN(&close_end_lsn, close_end_lsn.l.file + 1, 0);

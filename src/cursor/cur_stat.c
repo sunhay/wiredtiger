@@ -635,7 +635,8 @@ __wt_curstat_open(WT_SESSION_IMPL *session, const char *uri, WT_CURSOR *other, c
         if ((ret = __wt_config_subgets(session, &cval, "all", &sval)) == 0 && sval.val != 0) {
             if (!FLD_ISSET(conn->stat_flags, WT_STAT_TYPE_ALL))
                 goto config_err;
-            F_SET(cst, WT_STAT_TYPE_ALL | WT_STAT_TYPE_CACHE_WALK | WT_STAT_TYPE_FAST |
+            F_SET(cst,
+              WT_STAT_TYPE_ALL | WT_STAT_TYPE_CACHE_WALK | WT_STAT_TYPE_FAST |
                 WT_STAT_TYPE_TREE_WALK);
         }
         WT_ERR_NOTFOUND_OK(ret, false);

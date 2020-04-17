@@ -1249,9 +1249,10 @@ __slvg_col_build_leaf(WT_SESSION_IMPL *session, WT_TRACK *trk, WT_REF *ref)
     cookie->skip = skip = trk->col_start - recno;
     cookie->take = take = (trk->col_stop - trk->col_start) + 1;
 
-    __wt_verbose(session, WT_VERB_SALVAGE, "%s merge discarding first %" PRIu64
-                                           " records, "
-                                           "then taking %" PRIu64 " records",
+    __wt_verbose(session, WT_VERB_SALVAGE,
+      "%s merge discarding first %" PRIu64
+      " records, "
+      "then taking %" PRIu64 " records",
       __wt_addr_string(session, trk->trk_addr, trk->trk_addr_size, trk->ss->tmp1), skip, take);
 
     /* Set the referenced flag on overflow pages we're using. */

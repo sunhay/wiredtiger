@@ -553,7 +553,7 @@ __rec_row_zero_len(WT_SESSION_IMPL *session, wt_timestamp_t start_ts, uint64_t s
      */
     return ((stop_ts == WT_TS_MAX && stop_txn == WT_TXN_MAX) &&
       ((start_ts == WT_TS_NONE && start_txn == WT_TXN_NONE) ||
-              __wt_txn_visible_all(session, start_txn, start_ts)));
+        __wt_txn_visible_all(session, start_txn, start_ts)));
 }
 
 /*

@@ -132,10 +132,11 @@ __wt_conn_compat_config(WT_SESSION_IMPL *session, const char **cfg, bool reconfi
      */
     if (reconfig && conn->req_max_major != WT_CONN_COMPAT_NONE &&
       (conn->req_max_major < rel_major ||
-          (conn->req_max_major == rel_major && conn->req_max_minor < rel_minor)))
-        WT_RET_MSG(session, ENOTSUP, WT_COMPAT_MSG_PREFIX
-          "required max of %" PRIu16 ".%" PRIu16
-          "cannot be smaller than requested compatibility release %" PRIu16 ".%" PRIu16,
+        (conn->req_max_major == rel_major && conn->req_max_minor < rel_minor)))
+        WT_RET_MSG(session, ENOTSUP,
+          WT_COMPAT_MSG_PREFIX "required max of %" PRIu16 ".%" PRIu16
+                               "cannot be smaller than requested compatibility release %" PRIu16
+                               ".%" PRIu16,
           conn->req_max_major, conn->req_max_minor, rel_major, rel_minor);
 
     /*
@@ -144,10 +145,11 @@ __wt_conn_compat_config(WT_SESSION_IMPL *session, const char **cfg, bool reconfi
      */
     if (reconfig && conn->req_min_major != WT_CONN_COMPAT_NONE &&
       (conn->req_min_major > rel_major ||
-          (conn->req_min_major == rel_major && conn->req_min_minor > rel_minor)))
-        WT_RET_MSG(session, ENOTSUP, WT_COMPAT_MSG_PREFIX
-          "required min of %" PRIu16 ".%" PRIu16
-          "cannot be larger than requested compatibility release %" PRIu16 ".%" PRIu16,
+        (conn->req_min_major == rel_major && conn->req_min_minor > rel_minor)))
+        WT_RET_MSG(session, ENOTSUP,
+          WT_COMPAT_MSG_PREFIX "required min of %" PRIu16 ".%" PRIu16
+                               "cannot be larger than requested compatibility release %" PRIu16
+                               ".%" PRIu16,
           conn->req_min_major, conn->req_min_minor, rel_major, rel_minor);
 
     conn->compat_major = rel_major;

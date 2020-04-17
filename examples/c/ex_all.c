@@ -687,7 +687,7 @@ session_ops(WT_SESSION *session)
 
         /*! [Compact a table] */
         error_check(session->compact(session, "table:mytable", NULL));
-/*! [Compact a table] */
+        /*! [Compact a table] */
 
 #ifdef MIGHT_NOT_RUN
         /*! [Import a file] */
@@ -1145,9 +1145,9 @@ main(int argc, char *argv[])
     /*! [Open a connection] */
 
     connection_ops(conn);
-/*
- * The connection has been closed.
- */
+    /*
+     * The connection has been closed.
+     */
 
 #ifdef MIGHT_NOT_RUN
     /*

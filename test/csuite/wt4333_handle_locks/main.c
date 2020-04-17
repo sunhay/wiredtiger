@@ -305,10 +305,21 @@ run(int argc, char *argv[])
         u_int uris;
         bool cache_cursors;
     } runs[] = {
-      {1, 1, false}, {1, 1, true}, {8, 1, false}, {8, 1, true}, {16, 1, false}, {16, 1, true},
-      {16, WT_ELEMENTS(uri_list), false}, {16, WT_ELEMENTS(uri_list), true}, {200, 100, false},
-      {200, 100, true}, {200, WT_ELEMENTS(uri_list), false}, {200, WT_ELEMENTS(uri_list), true},
-      {300, 100, false}, {300, 100, true}, {600, WT_ELEMENTS(uri_list), false},
+      {1, 1, false},
+      {1, 1, true},
+      {8, 1, false},
+      {8, 1, true},
+      {16, 1, false},
+      {16, 1, true},
+      {16, WT_ELEMENTS(uri_list), false},
+      {16, WT_ELEMENTS(uri_list), true},
+      {200, 100, false},
+      {200, 100, true},
+      {200, WT_ELEMENTS(uri_list), false},
+      {200, WT_ELEMENTS(uri_list), true},
+      {300, 100, false},
+      {300, 100, true},
+      {600, WT_ELEMENTS(uri_list), false},
       {600, WT_ELEMENTS(uri_list), true},
     };
     WT_RAND_STATE rnd;

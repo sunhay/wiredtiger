@@ -210,7 +210,7 @@ set_codes(WT_FREQTREE_NODE *node, WT_HUFFMAN_CODE *codes, uint16_t pattern, uint
          */
         if (len < MAX_CODE_LENGTH &&
           ((half = (uint16_t)(1 << (remaining - 1))) < node->left->weight ||
-              half < node->right->weight)) {
+            half < node->right->weight)) {
             pattern = (uint16_t)(pattern << remaining);
             len = MAX_CODE_LENGTH;
         }
@@ -332,14 +332,16 @@ __wt_huffman_open(
     __wt_qsort(sym, symcnt, sizeof(INDEXED_SYMBOL), indexed_symbol_compare);
     for (i = 0; i < symcnt; ++i) {
         if (i > 0 && sym[i].symbol == sym[i - 1].symbol)
-            WT_ERR_MSG(session, EINVAL, "duplicate symbol %" PRIu32 " (%#" PRIx32
-                                        ") "
-                                        "specified in a huffman table",
+            WT_ERR_MSG(session, EINVAL,
+              "duplicate symbol %" PRIu32 " (%#" PRIx32
+              ") "
+              "specified in a huffman table",
               sym[i].symbol, sym[i].symbol);
         if (sym[i].symbol > huffman->numSymbols)
-            WT_ERR_MSG(session, EINVAL, "out-of-range symbol %" PRIu32 " (%#" PRIx32
-                                        ") "
-                                        "specified in a huffman table",
+            WT_ERR_MSG(session, EINVAL,
+              "out-of-range symbol %" PRIu32 " (%#" PRIx32
+              ") "
+              "specified in a huffman table",
               sym[i].symbol, sym[i].symbol);
     }
 

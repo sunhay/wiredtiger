@@ -270,8 +270,8 @@ __win_file_read(
     nr = 0;
 
     /* Assert direct I/O is aligned and a multiple of the alignment. */
-    WT_ASSERT(
-      session, !win_fh->direct_io || S2C(session)->buffer_alignment == 0 ||
+    WT_ASSERT(session,
+      !win_fh->direct_io || S2C(session)->buffer_alignment == 0 ||
         (!((uintptr_t)buf & (uintptr_t)(S2C(session)->buffer_alignment - 1)) &&
           len >= S2C(session)->buffer_alignment && len % S2C(session)->buffer_alignment == 0));
 
@@ -418,8 +418,8 @@ __win_file_write(
     nw = 0;
 
     /* Assert direct I/O is aligned and a multiple of the alignment. */
-    WT_ASSERT(
-      session, !win_fh->direct_io || S2C(session)->buffer_alignment == 0 ||
+    WT_ASSERT(session,
+      !win_fh->direct_io || S2C(session)->buffer_alignment == 0 ||
         (!((uintptr_t)buf & (uintptr_t)(S2C(session)->buffer_alignment - 1)) &&
           len >= S2C(session)->buffer_alignment && len % S2C(session)->buffer_alignment == 0));
 

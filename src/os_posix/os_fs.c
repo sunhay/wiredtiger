@@ -262,9 +262,9 @@ __posix_fs_rename(WT_FILE_SYSTEM *file_system, WT_SESSION *wt_session, const cha
 
         fp = strrchr(from, '/');
         tp = strrchr(to, '/');
-        same_directory =
-          (fp == NULL && tp == NULL) || (fp != NULL && tp != NULL && fp - from == tp - to &&
-                                          memcmp(from, to, (size_t)(fp - from)) == 0);
+        same_directory = (fp == NULL && tp == NULL) ||
+          (fp != NULL && tp != NULL && fp - from == tp - to &&
+            memcmp(from, to, (size_t)(fp - from)) == 0);
 
         if (!same_directory)
             WT_RET(__posix_directory_sync(session, to));
@@ -411,14 +411,15 @@ __posix_file_read(
     session = (WT_SESSION_IMPL *)wt_session;
     pfh = (WT_FILE_HANDLE_POSIX *)file_handle;
 
-    __wt_verbose(session, WT_VERB_READ, "read: %s, fd=%d, offset=%" PRId64
-                                        ","
-                                        "len=%" WT_SIZET_FMT "\n",
+    __wt_verbose(session, WT_VERB_READ,
+      "read: %s, fd=%d, offset=%" PRId64
+      ","
+      "len=%" WT_SIZET_FMT "\n",
       file_handle->name, pfh->fd, offset, len);
 
     /* Assert direct I/O is aligned and a multiple of the alignment. */
-    WT_ASSERT(
-      session, !pfh->direct_io || S2C(session)->buffer_alignment == 0 ||
+    WT_ASSERT(session,
+      !pfh->direct_io || S2C(session)->buffer_alignment == 0 ||
         (!((uintptr_t)buf & (uintptr_t)(S2C(session)->buffer_alignment - 1)) &&
           len >= S2C(session)->buffer_alignment && len % S2C(session)->buffer_alignment == 0));
 
@@ -561,9 +562,10 @@ __posix_file_truncate(WT_FILE_HANDLE *file_handle, WT_SESSION *wt_session, wt_of
     session = (WT_SESSION_IMPL *)wt_session;
     pfh = (WT_FILE_HANDLE_POSIX *)file_handle;
 
-    __wt_verbose(session, WT_VERB_FILEOPS, "%s, file-truncate: size=%" PRId64
-                                           ","
-                                           "mapped size=%" PRId64 "\n",
+    __wt_verbose(session, WT_VERB_FILEOPS,
+      "%s, file-truncate: size=%" PRId64
+      ","
+      "mapped size=%" PRId64 "\n",
       file_handle->name, len, pfh->mmap_size);
 
     remap = (len != pfh->mmap_size);
@@ -600,14 +602,15 @@ __posix_file_write(
     session = (WT_SESSION_IMPL *)wt_session;
     pfh = (WT_FILE_HANDLE_POSIX *)file_handle;
 
-    __wt_verbose(session, WT_VERB_WRITE, "write: %s, fd=%d, offset=%" PRId64
-                                         ","
-                                         "len=%" WT_SIZET_FMT "\n",
+    __wt_verbose(session, WT_VERB_WRITE,
+      "write: %s, fd=%d, offset=%" PRId64
+      ","
+      "len=%" WT_SIZET_FMT "\n",
       file_handle->name, pfh->fd, offset, len);
 
     /* Assert direct I/O is aligned and a multiple of the alignment. */
-    WT_ASSERT(
-      session, !pfh->direct_io || S2C(session)->buffer_alignment == 0 ||
+    WT_ASSERT(session,
+      !pfh->direct_io || S2C(session)->buffer_alignment == 0 ||
         (!((uintptr_t)buf & (uintptr_t)(S2C(session)->buffer_alignment - 1)) &&
           len >= S2C(session)->buffer_alignment && len % S2C(session)->buffer_alignment == 0));
 
@@ -1024,9 +1027,10 @@ __wt_map_file(WT_FILE_HANDLE *file_handle, WT_SESSION *wt_session)
 
     pfh->mmap_size = file_size;
 
-    __wt_verbose(session, WT_VERB_FILEOPS, "%s: file-mmap: fd=%d, size=%" PRId64
-                                           ", "
-                                           "mapped buffer=%p\n",
+    __wt_verbose(session, WT_VERB_FILEOPS,
+      "%s: file-mmap: fd=%d, size=%" PRId64
+      ", "
+      "mapped buffer=%p\n",
       file_handle->name, pfh->fd, pfh->mmap_size, (void *)pfh->mmap_buf);
 }
 

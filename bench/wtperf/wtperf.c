@@ -1437,8 +1437,9 @@ monitor(void *arg)
               ",\"modify\":{\"ops per sec\":%" PRIu64 ",\"average latency\":%" PRIu32
               ",\"min latency\":%" PRIu32 ",\"max latency\":%" PRIu32 "}",
               cur_modifies, modify_avg, modify_min, modify_max);
-            (void)fprintf(jfp, ",\"read\":{\"ops per sec\":%" PRIu64 ",\"average latency\":%" PRIu32
-                               ",\"min latency\":%" PRIu32 ",\"max latency\":%" PRIu32 "}",
+            (void)fprintf(jfp,
+              ",\"read\":{\"ops per sec\":%" PRIu64 ",\"average latency\":%" PRIu32
+              ",\"min latency\":%" PRIu32 ",\"max latency\":%" PRIu32 "}",
               cur_reads, read_avg, read_min, read_max);
             (void)fprintf(jfp,
               ",\"update\":{\"ops per sec\":%" PRIu64 ",\"average latency\":%" PRIu32
@@ -1447,8 +1448,9 @@ monitor(void *arg)
             fprintf(jfp, "}}\n");
         }
 
-        if (latency_max != 0 && (insert_max > latency_max || modify_max > latency_max ||
-                                  read_max > latency_max || update_max > latency_max)) {
+        if (latency_max != 0 &&
+          (insert_max > latency_max || modify_max > latency_max || read_max > latency_max ||
+            update_max > latency_max)) {
             if (opts->max_latency_fatal) {
                 level = 1;
                 msg_err = WT_PANIC;
@@ -1463,10 +1465,11 @@ monitor(void *arg)
               " modify max %" PRIu32 " read max %" PRIu32 " update max %" PRIu32,
               str, latency_max, insert_max, modify_max, read_max, update_max);
         }
-        if (min_thr != 0 && ((cur_inserts != 0 && cur_inserts < min_thr) ||
-                              (cur_modifies != 0 && cur_modifies < min_thr) ||
-                              (cur_reads != 0 && cur_reads < min_thr) ||
-                              (cur_updates != 0 && cur_updates < min_thr))) {
+        if (min_thr != 0 &&
+          ((cur_inserts != 0 && cur_inserts < min_thr) ||
+            (cur_modifies != 0 && cur_modifies < min_thr) ||
+            (cur_reads != 0 && cur_reads < min_thr) ||
+            (cur_updates != 0 && cur_updates < min_thr))) {
             if (opts->min_throughput_fatal) {
                 level = 1;
                 msg_err = WT_PANIC;
@@ -1731,8 +1734,9 @@ execute_populate(WTPERF *wtperf)
         interval = 0;
         wtperf->totalsec += opts->report_interval;
         wtperf->insert_ops = sum_pop_ops(wtperf);
-        lprintf(wtperf, 0, 1, "%" PRIu64 " populate inserts (%" PRIu64 " of %" PRIu32
-                              ") in %" PRIu32 " secs (%" PRIu32 " total secs)",
+        lprintf(wtperf, 0, 1,
+          "%" PRIu64 " populate inserts (%" PRIu64 " of %" PRIu32 ") in %" PRIu32 " secs (%" PRIu32
+          " total secs)",
           wtperf->insert_ops - last_ops, wtperf->insert_ops, opts->icount, opts->report_interval,
           wtperf->totalsec);
         last_ops = wtperf->insert_ops;

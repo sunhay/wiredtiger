@@ -342,14 +342,16 @@ __wt_cache_destroy(WT_SESSION_IMPL *session)
 
     /* The cache should be empty at this point.  Complain if not. */
     if (cache->pages_inmem != cache->pages_evicted)
-        __wt_errx(session, "cache server: exiting with %" PRIu64
-                           " pages in "
-                           "memory and %" PRIu64 " pages evicted",
+        __wt_errx(session,
+          "cache server: exiting with %" PRIu64
+          " pages in "
+          "memory and %" PRIu64 " pages evicted",
           cache->pages_inmem, cache->pages_evicted);
     if (cache->bytes_image != 0)
-        __wt_errx(session, "cache server: exiting with %" PRIu64
-                           " image bytes in "
-                           "memory",
+        __wt_errx(session,
+          "cache server: exiting with %" PRIu64
+          " image bytes in "
+          "memory",
           cache->bytes_image);
     if (cache->bytes_inmem != 0)
         __wt_errx(

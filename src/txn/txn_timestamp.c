@@ -1230,7 +1230,8 @@ __wt_txn_clear_read_timestamp(WT_SESSION_IMPL *session)
 
     if (F_ISSET(txn, WT_TXN_SHARED_TS_READ)) {
         /* Assert the read timestamp is greater than or equal to the pinned timestamp. */
-        WT_ASSERT(session, txn->read_timestamp == txn_shared->pinned_read_timestamp &&
+        WT_ASSERT(session,
+          txn->read_timestamp == txn_shared->pinned_read_timestamp &&
             txn->read_timestamp >= S2C(session)->txn_global.pinned_timestamp);
 
         /*

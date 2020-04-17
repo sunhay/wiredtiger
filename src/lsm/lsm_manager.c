@@ -391,7 +391,7 @@ __lsm_manager_run_server(WT_SESSION_IMPL *session)
             else if ((!lsm_tree->modified && lsm_tree->nchunks > 1) ||
               (lsm_tree->queue_ref == 0 && lsm_tree->nchunks > 1) ||
               (lsm_tree->merge_aggressiveness > WT_LSM_AGGRESSIVE_THRESHOLD &&
-                       !F_ISSET(lsm_tree, WT_LSM_TREE_COMPACTING)) ||
+                !F_ISSET(lsm_tree, WT_LSM_TREE_COMPACTING)) ||
               idlems > fillms) {
                 WT_ERR(__wt_lsm_manager_push_entry(session, WT_LSM_WORK_SWITCH, 0, lsm_tree));
                 WT_ERR(__wt_lsm_manager_push_entry(session, WT_LSM_WORK_DROP, 0, lsm_tree));

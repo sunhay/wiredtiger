@@ -282,8 +282,9 @@ done:
     return (0);
 
 err:
-    __wt_err(session, ret, "operation apply failed during recovery: operation type %" PRIu32
-                           " at LSN %" PRIu32 "/%" PRIu32,
+    __wt_err(session, ret,
+      "operation apply failed during recovery: operation type %" PRIu32 " at LSN %" PRIu32
+      "/%" PRIu32,
       optype, lsnp->l.file, lsnp->l.offset);
     return (ret);
 }
@@ -731,9 +732,11 @@ done:
          * solely based on the write generation numbers.
          */
 
-        WT_ASSERT(session, conn->txn_global.has_stable_timestamp == false &&
+        WT_ASSERT(session,
+          conn->txn_global.has_stable_timestamp == false &&
             conn->txn_global.stable_timestamp == WT_TS_NONE);
-        WT_ASSERT(session, conn->txn_global.has_oldest_timestamp == false &&
+        WT_ASSERT(session,
+          conn->txn_global.has_oldest_timestamp == false &&
             conn->txn_global.oldest_timestamp == WT_TS_NONE);
 
         /*

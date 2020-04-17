@@ -54,8 +54,9 @@ handle_error(WT_EVENT_HANDLER *handler, WT_SESSION *session, int error, const ch
     (void)(handler);
 
     /* Skip the error messages we're expecting to see. */
-    if (ignore_errors > 0 && (strstr(message, "requires key be set") != NULL ||
-                               strstr(message, "requires value be set") != NULL)) {
+    if (ignore_errors > 0 &&
+      (strstr(message, "requires key be set") != NULL ||
+        strstr(message, "requires value be set") != NULL)) {
         --ignore_errors;
         return (0);
     }

@@ -467,8 +467,9 @@ __verify_tree(WT_SESSION_IMPL *session, WT_REF *ref, WT_CELL_UNPACK *addr_unpack
     case WT_PAGE_COL_INT:
     case WT_PAGE_COL_VAR:
         if (ref->ref_recno != vs->records_so_far + 1)
-            WT_RET_MSG(session, WT_ERROR, "page at %s has a starting record of %" PRIu64
-                                          " when the expected starting record is %" PRIu64,
+            WT_RET_MSG(session, WT_ERROR,
+              "page at %s has a starting record of %" PRIu64
+              " when the expected starting record is %" PRIu64,
               __verify_addr_string(session, ref, vs->tmp1), ref->ref_recno, vs->records_so_far + 1);
         break;
     }
@@ -515,11 +516,11 @@ __verify_tree(WT_SESSION_IMPL *session, WT_REF *ref, WT_CELL_UNPACK *addr_unpack
     case WT_PAGE_ROW_INT:
         if (addr_unpack->raw != WT_CELL_ADDR_INT)
 celltype_err:
-        WT_RET_MSG(session, WT_ERROR,
-          "page at %s, of type %s, is referenced in "
-          "its parent by a cell of type %s",
-          __verify_addr_string(session, ref, vs->tmp1), __wt_page_type_string(page->type),
-          __wt_cell_type_string(addr_unpack->raw));
+            WT_RET_MSG(session, WT_ERROR,
+              "page at %s, of type %s, is referenced in "
+              "its parent by a cell of type %s",
+              __verify_addr_string(session, ref, vs->tmp1), __wt_page_type_string(page->type),
+              __wt_cell_type_string(addr_unpack->raw));
         break;
     }
 
@@ -535,11 +536,12 @@ celltype_err:
              */
             ++entry;
             if (child_ref->ref_recno != vs->records_so_far + 1) {
-                WT_RET_MSG(session, WT_ERROR, "the starting record number in entry %" PRIu32
-                                              " of the column internal page at "
-                                              "%s is %" PRIu64
-                                              " and the expected "
-                                              "starting record number is %" PRIu64,
+                WT_RET_MSG(session, WT_ERROR,
+                  "the starting record number in entry %" PRIu32
+                  " of the column internal page at "
+                  "%s is %" PRIu64
+                  " and the expected "
+                  "starting record number is %" PRIu64,
                   entry, __verify_addr_string(session, child_ref, vs->tmp1), child_ref->ref_recno,
                   vs->records_so_far + 1);
             }
@@ -618,10 +620,11 @@ __verify_row_int_key_order(
     /* Compare the key against the largest key we've seen so far. */
     WT_RET(__wt_compare(session, btree->collator, &item, vs->max_key, &cmp));
     if (cmp <= 0)
-        WT_RET_MSG(session, WT_ERROR, "the internal key in entry %" PRIu32
-                                      " on the page at %s "
-                                      "sorts before the last key appearing on page %s, earlier "
-                                      "in the tree: %s, %s",
+        WT_RET_MSG(session, WT_ERROR,
+          "the internal key in entry %" PRIu32
+          " on the page at %s "
+          "sorts before the last key appearing on page %s, earlier "
+          "in the tree: %s, %s",
           entry, __verify_addr_string(session, ref, vs->tmp1), (char *)vs->max_addr->data,
           __wt_buf_set_printable(session, item.data, item.size, vs->tmp2),
           __wt_buf_set_printable(session, vs->max_key->data, vs->max_key->size, vs->tmp3));
@@ -744,9 +747,10 @@ __verify_ts_addr_cmp(WT_SESSION_IMPL *session, WT_REF *ref, uint32_t cell_num, c
     if (!gt && ts1 <= ts2)
         return (0);
 
-    WT_RET_MSG(session, WT_ERROR, "cell %" PRIu32
-                                  " on page at %s failed verification with %s "
-                                  "timestamp of %s, %s the parent's %s timestamp of %s",
+    WT_RET_MSG(session, WT_ERROR,
+      "cell %" PRIu32
+      " on page at %s failed verification with %s "
+      "timestamp of %s, %s the parent's %s timestamp of %s",
       cell_num, __verify_addr_string(session, ref, vs->tmp1), ts1_name,
       __verify_timestamp_to_pretty_string(ts1, ts_string[0]), gt ? "less than" : "greater than",
       ts2_name, __verify_timestamp_to_pretty_string(ts2, ts_string[1]));
@@ -820,11 +824,12 @@ __verify_txn_addr_cmp(WT_SESSION_IMPL *session, WT_REF *ref, uint32_t cell_num,
     if (dsk->write_gen <= S2C(session)->base_write_gen)
         return (0);
 
-    WT_RET_MSG(session, WT_ERROR, "cell %" PRIu32
-                                  " on page at %s failed verification with %s "
-                                  "transaction of %" PRIu64
-                                  ", %s the parent's %s transaction of "
-                                  "%" PRIu64,
+    WT_RET_MSG(session, WT_ERROR,
+      "cell %" PRIu32
+      " on page at %s failed verification with %s "
+      "transaction of %" PRIu64
+      ", %s the parent's %s transaction of "
+      "%" PRIu64,
       cell_num, __verify_addr_string(session, ref, vs->tmp1), txn1_name, txn1,
       gt ? "less than" : "greater than", txn2_name, txn2);
 }
@@ -956,10 +961,11 @@ __verify_page_content(
         case WT_CELL_VALUE_OVFL:
             found_ovfl = true;
             if ((ret = __verify_overflow(session, unpack.data, unpack.size, vs)) != 0)
-                WT_RET_MSG(session, ret, "cell %" PRIu32
-                                         " on page at %s references "
-                                         "an overflow item at %s that failed "
-                                         "verification",
+                WT_RET_MSG(session, ret,
+                  "cell %" PRIu32
+                  " on page at %s references "
+                  "an overflow item at %s that failed "
+                  "verification",
                   cell_num - 1, __verify_addr_string(session, ref, vs->tmp1),
                   __wt_addr_string(session, unpack.data, unpack.size, vs->tmp2));
             break;
@@ -975,25 +981,28 @@ __verify_page_content(
         case WT_CELL_ADDR_LEAF:
         case WT_CELL_ADDR_LEAF_NO:
             if (unpack.oldest_start_ts != WT_TS_NONE && unpack.newest_stop_ts == WT_TS_NONE)
-                WT_RET_MSG(session, WT_ERROR, "cell %" PRIu32
-                                              " on page at %s has a "
-                                              "newest stop timestamp of 0",
+                WT_RET_MSG(session, WT_ERROR,
+                  "cell %" PRIu32
+                  " on page at %s has a "
+                  "newest stop timestamp of 0",
                   cell_num - 1, __verify_addr_string(session, ref, vs->tmp1));
             if (unpack.oldest_start_ts > unpack.newest_stop_ts)
-                WT_RET_MSG(session, WT_ERROR, "cell %" PRIu32
-                                              " on page at %s has an "
-                                              "oldest start timestamp %s newer than "
-                                              "its newest stop timestamp %s",
+                WT_RET_MSG(session, WT_ERROR,
+                  "cell %" PRIu32
+                  " on page at %s has an "
+                  "oldest start timestamp %s newer than "
+                  "its newest stop timestamp %s",
                   cell_num - 1, __verify_addr_string(session, ref, vs->tmp1),
                   __wt_timestamp_to_string(unpack.oldest_start_ts, ts_string[0]),
                   __wt_timestamp_to_string(unpack.newest_stop_ts, ts_string[1]));
             if (unpack.oldest_start_txn > unpack.newest_stop_txn) {
-                WT_RET_MSG(session, WT_ERROR, "cell %" PRIu32
-                                              " on page at %s has an "
-                                              "oldest start transaction (%" PRIu64
-                                              ") "
-                                              "newer than its newest stop transaction "
-                                              "(%" PRIu64 ")",
+                WT_RET_MSG(session, WT_ERROR,
+                  "cell %" PRIu32
+                  " on page at %s has an "
+                  "oldest start transaction (%" PRIu64
+                  ") "
+                  "newer than its newest stop transaction "
+                  "(%" PRIu64 ")",
                   cell_num - 1, __verify_addr_string(session, ref, vs->tmp1),
                   unpack.oldest_start_txn, unpack.newest_stop_txn);
             }
@@ -1031,24 +1040,27 @@ __verify_page_content(
         case WT_CELL_VALUE_OVFL:
         case WT_CELL_VALUE_SHORT:
             if (unpack.start_ts != WT_TS_NONE && unpack.stop_ts == WT_TS_NONE)
-                WT_RET_MSG(session, WT_ERROR, "cell %" PRIu32
-                                              " on page at %s has a stop "
-                                              "timestamp of 0",
+                WT_RET_MSG(session, WT_ERROR,
+                  "cell %" PRIu32
+                  " on page at %s has a stop "
+                  "timestamp of 0",
                   cell_num - 1, __verify_addr_string(session, ref, vs->tmp1));
             if (unpack.start_ts > unpack.stop_ts)
-                WT_RET_MSG(session, WT_ERROR, "cell %" PRIu32
-                                              " on page at %s has a "
-                                              "start timestamp %s newer than its stop "
-                                              "timestamp %s",
+                WT_RET_MSG(session, WT_ERROR,
+                  "cell %" PRIu32
+                  " on page at %s has a "
+                  "start timestamp %s newer than its stop "
+                  "timestamp %s",
                   cell_num - 1, __verify_addr_string(session, ref, vs->tmp1),
                   __wt_timestamp_to_string(unpack.start_ts, ts_string[0]),
                   __wt_timestamp_to_string(unpack.stop_ts, ts_string[1]));
             if (unpack.start_txn > unpack.stop_txn)
-                WT_RET_MSG(session, WT_ERROR, "cell %" PRIu32
-                                              " on page at %s has a "
-                                              "start transaction %" PRIu64
-                                              "newer than "
-                                              "its stop transaction %" PRIu64,
+                WT_RET_MSG(session, WT_ERROR,
+                  "cell %" PRIu32
+                  " on page at %s has a "
+                  "start transaction %" PRIu64
+                  "newer than "
+                  "its stop transaction %" PRIu64,
                   cell_num - 1, __verify_addr_string(session, ref, vs->tmp1), unpack.start_txn,
                   unpack.stop_txn);
 

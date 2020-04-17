@@ -74,8 +74,9 @@ util_verify(WT_SESSION *session, int argc, char *argv[])
             return (1);
     }
 
-    if (hs_verify && (dump_address || dump_blocks || dump_layout || dump_offsets != NULL ||
-                       dump_pages || stable_timestamp)) {
+    if (hs_verify &&
+      (dump_address || dump_blocks || dump_layout || dump_offsets != NULL || dump_pages ||
+        stable_timestamp)) {
         (void)util_err(session, 0, "-a and -d are not supported together");
     }
 

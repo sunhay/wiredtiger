@@ -226,9 +226,10 @@ __verify_dsk_ts_addr_cmp(WT_SESSION_IMPL *session, uint32_t cell_num, const char
         ts2_bp = __wt_timestamp_to_string(ts2, ts_string[1]);
         break;
     }
-    WT_RET_MSG(session, WT_ERROR, "cell %" PRIu32
-                                  " on page at %s failed verification with %s "
-                                  "timestamp of %s, %s the parent's %s timestamp of %s",
+    WT_RET_MSG(session, WT_ERROR,
+      "cell %" PRIu32
+      " on page at %s failed verification with %s "
+      "timestamp of %s, %s the parent's %s timestamp of %s",
       cell_num, tag, ts1_name, ts1_bp, gt ? "less than" : "greater than", ts2_name, ts2_bp);
 }
 
@@ -252,11 +253,12 @@ __verify_dsk_txn_addr_cmp(WT_SESSION_IMPL *session, uint32_t cell_num, const cha
     if (dsk->write_gen <= S2C(session)->base_write_gen)
         return (0);
 
-    WT_RET_MSG(session, WT_ERROR, "cell %" PRIu32
-                                  " on page at %s failed verification with %s "
-                                  "transaction of %" PRIu64
-                                  ", %s the parent's %s transaction of "
-                                  "%" PRIu64,
+    WT_RET_MSG(session, WT_ERROR,
+      "cell %" PRIu32
+      " on page at %s failed verification with %s "
+      "transaction of %" PRIu64
+      ", %s the parent's %s transaction of "
+      "%" PRIu64,
       cell_num, tag, txn1_name, txn1, gt ? "less than" : "greater than", txn2_name, txn2);
 }
 
@@ -285,23 +287,26 @@ __verify_dsk_validity(WT_SESSION_IMPL *session, WT_CELL_UNPACK *unpack, uint32_t
     case WT_CELL_ADDR_LEAF:
     case WT_CELL_ADDR_LEAF_NO:
         if (unpack->oldest_start_ts != WT_TS_NONE && unpack->newest_stop_ts == WT_TS_NONE)
-            WT_RET_VRFY(session, "cell %" PRIu32
-                                 " on page at %s has a newest stop "
-                                 "timestamp of 0",
+            WT_RET_VRFY(session,
+              "cell %" PRIu32
+              " on page at %s has a newest stop "
+              "timestamp of 0",
               cell_num - 1, tag);
         if (unpack->oldest_start_ts > unpack->newest_stop_ts)
-            WT_RET_VRFY(session, "cell %" PRIu32
-                                 " on page at %s has an oldest "
-                                 "start timestamp %s newer than its newest stop "
-                                 "timestamp %s",
+            WT_RET_VRFY(session,
+              "cell %" PRIu32
+              " on page at %s has an oldest "
+              "start timestamp %s newer than its newest stop "
+              "timestamp %s",
               cell_num - 1, tag, __wt_timestamp_to_string(unpack->oldest_start_ts, ts_string[0]),
               __wt_timestamp_to_string(unpack->newest_stop_ts, ts_string[1]));
         if (unpack->oldest_start_txn > unpack->newest_stop_txn)
-            WT_RET_VRFY(session, "cell %" PRIu32
-                                 " on page at %s has an oldest "
-                                 "start transaction %" PRIu64
-                                 " newer than its "
-                                 "newest stop transaction %" PRIu64,
+            WT_RET_VRFY(session,
+              "cell %" PRIu32
+              " on page at %s has an oldest "
+              "start transaction %" PRIu64
+              " newer than its "
+              "newest stop transaction %" PRIu64,
               cell_num - 1, tag, unpack->oldest_start_txn, unpack->newest_stop_txn);
 
         if (addr == NULL)
@@ -329,22 +334,25 @@ __verify_dsk_validity(WT_SESSION_IMPL *session, WT_CELL_UNPACK *unpack, uint32_t
     case WT_CELL_VALUE_OVFL_RM:
     case WT_CELL_VALUE_SHORT:
         if (unpack->start_ts != WT_TS_NONE && unpack->stop_ts == WT_TS_NONE)
-            WT_RET_VRFY(session, "cell %" PRIu32
-                                 " on page at %s has a stop "
-                                 "timestamp of 0",
+            WT_RET_VRFY(session,
+              "cell %" PRIu32
+              " on page at %s has a stop "
+              "timestamp of 0",
               cell_num - 1, tag);
         if (unpack->start_ts > unpack->stop_ts)
-            WT_RET_VRFY(session, "cell %" PRIu32
-                                 " on page at %s has a start "
-                                 "timestamp %s newer than its stop timestamp %s",
+            WT_RET_VRFY(session,
+              "cell %" PRIu32
+              " on page at %s has a start "
+              "timestamp %s newer than its stop timestamp %s",
               cell_num - 1, tag, __wt_timestamp_to_string(unpack->start_ts, ts_string[0]),
               __wt_timestamp_to_string(unpack->stop_ts, ts_string[1]));
         if (unpack->start_txn > unpack->stop_txn)
-            WT_RET_VRFY(session, "cell %" PRIu32
-                                 " on page at %s has a start "
-                                 "transaction %" PRIu64
-                                 " newer than its stop "
-                                 "transaction %" PRIu64,
+            WT_RET_VRFY(session,
+              "cell %" PRIu32
+              " on page at %s has a start "
+              "transaction %" PRIu64
+              " newer than its stop "
+              "transaction %" PRIu64,
               cell_num - 1, tag, unpack->start_txn, unpack->stop_txn);
 
         if (addr == NULL)
@@ -443,9 +451,10 @@ __verify_dsk_row(
             case WAS_KEY:
                 if (dsk->type == WT_PAGE_ROW_LEAF)
                     break;
-                WT_ERR_VRFY(session, "cell %" PRIu32
-                                     " on page at %s is the "
-                                     "first of two adjacent keys",
+                WT_ERR_VRFY(session,
+                  "cell %" PRIu32
+                  " on page at %s is the "
+                  "first of two adjacent keys",
                   cell_num - 1, tag);
             }
             last_cell_type = WAS_KEY;
@@ -462,9 +471,10 @@ __verify_dsk_row(
             case WAS_KEY:
                 break;
             case WAS_VALUE:
-                WT_ERR_VRFY(session, "cell %" PRIu32
-                                     " on page at %s is the "
-                                     "first of two adjacent values",
+                WT_ERR_VRFY(session,
+                  "cell %" PRIu32
+                  " on page at %s is the "
+                  "first of two adjacent values",
                   cell_num - 1, tag);
             }
             last_cell_type = WAS_VALUE;
@@ -511,18 +521,20 @@ __verify_dsk_row(
          */
         prefix = unpack->prefix;
         if (last_pfx->size == 0 && prefix != 0)
-            WT_ERR_VRFY(session, "the %" PRIu32
-                                 " key on page at %s is the first "
-                                 "non-overflow key on the page and has a non-zero "
-                                 "prefix compression value",
+            WT_ERR_VRFY(session,
+              "the %" PRIu32
+              " key on page at %s is the first "
+              "non-overflow key on the page and has a non-zero "
+              "prefix compression value",
               cell_num, tag);
 
         /* Confirm the prefix compression count is possible. */
         if (cell_num > 1 && prefix > last->size)
-            WT_ERR_VRFY(session, "key %" PRIu32
-                                 " on page at %s has a prefix "
-                                 "compression count of %" WT_SIZET_FMT
-                                 ", larger than the length of the previous key, %" WT_SIZET_FMT,
+            WT_ERR_VRFY(session,
+              "key %" PRIu32
+              " on page at %s has a prefix "
+              "compression count of %" WT_SIZET_FMT
+              ", larger than the length of the previous key, %" WT_SIZET_FMT,
               cell_num, tag, prefix, last->size);
 
         /*
@@ -569,9 +581,10 @@ key_compare:
           (dsk->type != WT_PAGE_ROW_INT && cell_num > 1)) {
             WT_ERR(__wt_compare(session, btree->collator, last, current, &cmp));
             if (cmp >= 0)
-                WT_ERR_VRFY(session, "the %" PRIu32 " and %" PRIu32
-                                     " keys on "
-                                     "page at %s are incorrectly sorted: %s, %s",
+                WT_ERR_VRFY(session,
+                  "the %" PRIu32 " and %" PRIu32
+                  " keys on "
+                  "page at %s are incorrectly sorted: %s, %s",
                   cell_num - 2, cell_num, tag,
                   __wt_buf_set_printable(session, last->data, last->size, tmp1),
                   __wt_buf_set_printable(session, current->data, current->size, tmp2));
@@ -602,9 +615,10 @@ key_compare:
      * number of physical entries.
      */
     if (dsk->type == WT_PAGE_ROW_INT && key_cnt * 2 != dsk->u.entries)
-        WT_ERR_VRFY(session, "%s page at %s has a key count of %" PRIu32
-                             " and a "
-                             "physical entry count of %" PRIu32,
+        WT_ERR_VRFY(session,
+          "%s page at %s has a key count of %" PRIu32
+          " and a "
+          "physical entry count of %" PRIu32,
           __wt_page_type_string(dsk->type), tag, key_cnt, dsk->u.entries);
     if (dsk->type == WT_PAGE_ROW_LEAF && F_ISSET(dsk, WT_PAGE_EMPTY_V_ALL) &&
       key_cnt != dsk->u.entries)
@@ -772,10 +786,11 @@ __verify_dsk_col_var(
         } else if (cell_type == WT_CELL_VALUE && last.data != NULL && last.size == unpack->size &&
           memcmp(last.data, unpack->data, last.size) == 0)
 match_err:
-        WT_RET_VRFY(session, "data entries %" PRIu32 " and %" PRIu32
-                             " on page at %s are identical and should "
-                             "have been run-length encoded",
-          cell_num - 1, cell_num, tag);
+            WT_RET_VRFY(session,
+              "data entries %" PRIu32 " and %" PRIu32
+              " on page at %s are identical and should "
+              "have been run-length encoded",
+              cell_num - 1, cell_num, tag);
 
         last.start_ts = unpack->start_ts;
         last.start_txn = unpack->start_txn;
@@ -820,9 +835,10 @@ __verify_dsk_memsize(
     len = WT_PTRDIFF((uint8_t *)dsk + dsk->mem_size, cell);
     if (len == 0)
         return (0);
-    WT_RET_VRFY(session, "%s page at %s has %" WT_SIZET_FMT
-                         " unexpected bytes of data "
-                         "after the last cell",
+    WT_RET_VRFY(session,
+      "%s page at %s has %" WT_SIZET_FMT
+      " unexpected bytes of data "
+      "after the last cell",
       __wt_page_type_string(dsk->type), tag, len);
 }
 
@@ -875,9 +891,10 @@ __err_cell_corrupt(WT_SESSION_IMPL *session, int retval, uint32_t entry_num, con
 static int
 __err_cell_corrupt_or_eof(WT_SESSION_IMPL *session, int retval, uint32_t entry_num, const char *tag)
 {
-    WT_RET_VRFY_RETVAL(session, retval, "item %" PRIu32
-                                        " on page at %s is a corrupted cell or references "
-                                        "non-existent file pages",
+    WT_RET_VRFY_RETVAL(session, retval,
+      "item %" PRIu32
+      " on page at %s is a corrupted cell or references "
+      "non-existent file pages",
       entry_num, tag);
 }
 
@@ -929,7 +946,8 @@ __err_cell_type(WT_SESSION_IMPL *session, uint32_t entry_num, const char *tag, u
         break;
     }
 
-    WT_RET_VRFY(session, "illegal cell and page type combination: cell %" PRIu32
-                         " on page at %s is a %s cell on a %s page",
+    WT_RET_VRFY(session,
+      "illegal cell and page type combination: cell %" PRIu32
+      " on page at %s is a %s cell on a %s page",
       entry_num, tag, __wt_cell_type_string(cell_type), __wt_page_type_string(dsk_type));
 }

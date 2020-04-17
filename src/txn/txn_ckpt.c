@@ -591,7 +591,8 @@ __checkpoint_prepare(WT_SESSION_IMPL *session, bool *trackingp, const char *cfg[
     /*
      * Sanity check that the oldest ID hasn't moved on before we have cleared our entry.
      */
-    WT_ASSERT(session, WT_TXNID_LE(txn_global->oldest_id, txn_shared->id) &&
+    WT_ASSERT(session,
+      WT_TXNID_LE(txn_global->oldest_id, txn_shared->id) &&
         WT_TXNID_LE(txn_global->oldest_id, txn_shared->pinned_id));
 
     /*
@@ -607,8 +608,10 @@ __checkpoint_prepare(WT_SESSION_IMPL *session, bool *trackingp, const char *cfg[
      * We rely on having the global transaction data locked so the oldest timestamp can't move past
      * the stable timestamp.
      */
-    WT_ASSERT(session, !F_ISSET(txn, WT_TXN_HAS_TS_COMMIT | WT_TXN_HAS_TS_READ |
-                           WT_TXN_SHARED_TS_DURABLE | WT_TXN_SHARED_TS_READ));
+    WT_ASSERT(session,
+      !F_ISSET(txn,
+        WT_TXN_HAS_TS_COMMIT | WT_TXN_HAS_TS_READ | WT_TXN_SHARED_TS_DURABLE |
+          WT_TXN_SHARED_TS_READ));
 
     if (use_timestamp) {
         /*
@@ -1483,8 +1486,8 @@ __checkpoint_mark_skip(WT_SESSION_IMPL *session, WT_CKPT *ckptbase, bool force)
         name = (ckpt - 1)->name;
         if (ckpt > ckptbase + 1 && deleted < 2 &&
           (strcmp(name, (ckpt - 2)->name) == 0 ||
-              (WT_PREFIX_MATCH(name, WT_CHECKPOINT) &&
-                WT_PREFIX_MATCH((ckpt - 2)->name, WT_CHECKPOINT)))) {
+            (WT_PREFIX_MATCH(name, WT_CHECKPOINT) &&
+              WT_PREFIX_MATCH((ckpt - 2)->name, WT_CHECKPOINT)))) {
             F_SET(btree, WT_BTREE_SKIP_CKPT);
             return (0);
         }

@@ -124,8 +124,8 @@ __wt_txn_release_snapshot(WT_SESSION_IMPL *session)
     txn_global = &S2C(session)->txn_global;
     txn_shared = WT_SESSION_TXN_SHARED(session);
 
-    WT_ASSERT(session, txn_shared->pinned_id == WT_TXN_NONE ||
-        session->txn.isolation == WT_ISO_READ_UNCOMMITTED ||
+    WT_ASSERT(session,
+      txn_shared->pinned_id == WT_TXN_NONE || session->txn.isolation == WT_ISO_READ_UNCOMMITTED ||
         !__wt_txn_visible_all(session, txn_shared->pinned_id, WT_TS_NONE));
 
     txn_shared->metadata_pinned = txn_shared->pinned_id = WT_TXN_NONE;
@@ -381,7 +381,7 @@ __wt_txn_update_oldest(WT_SESSION_IMPL *session, uint32_t flags)
     if ((oldest_id == prev_oldest_id ||
           (!strict && WT_TXNID_LT(oldest_id, prev_oldest_id + 100))) &&
       ((last_running == prev_last_running) ||
-          (!strict && WT_TXNID_LT(last_running, prev_last_running + 100))) &&
+        (!strict && WT_TXNID_LT(last_running, prev_last_running + 100))) &&
       metadata_pinned == prev_metadata_pinned)
         return (0);
 
@@ -1407,7 +1407,8 @@ __wt_txn_init(WT_SESSION_IMPL *session, WT_SESSION_IMPL *session_ret)
 
     WT_RET(__wt_calloc_def(session, S2C(session_ret)->session_size, &txn->snapshot));
 
-    WT_ASSERT(session, S2C(session_ret)->txn_global.txn_shared_list == NULL ||
+    WT_ASSERT(session,
+      S2C(session_ret)->txn_global.txn_shared_list == NULL ||
         WT_SESSION_TXN_SHARED(session_ret)->pinned_id == WT_TXN_NONE);
 
     /*
@@ -1726,30 +1727,31 @@ __wt_verbose_dump_txn_one(
      * Dump the information of the passed transaction into a buffer, to be logged with an optional
      * error message.
      */
-    WT_RET(__wt_snprintf(buf,
-      sizeof(buf), "transaction id: %" PRIu64 ", mod count: %u"
-                   ", snap min: %" PRIu64 ", snap max: %" PRIu64 ", snapshot count: %u"
-                   ", commit_timestamp: %s"
-                   ", durable_timestamp: %s"
-                   ", first_commit_timestamp: %s"
-                   ", prepare_timestamp: %s"
-                   ", read_timestamp: %s"
-                   ", pinned_durable_timestamp: %s"
-                   ", pinned_read_timestamp: %s"
-                   ", checkpoint LSN: [%" PRIu32 "][%" PRIu32 "]"
-                   ", full checkpoint: %s"
-                   ", rollback reason: %s"
-                   ", flags: 0x%08" PRIx32 ", isolation: %s",
-      txn->id, txn->mod_count, txn->snap_min, txn->snap_max, txn->snapshot_count,
-      __wt_timestamp_to_string(txn->commit_timestamp, ts_string[0]),
-      __wt_timestamp_to_string(txn->durable_timestamp, ts_string[1]),
-      __wt_timestamp_to_string(txn->first_commit_timestamp, ts_string[2]),
-      __wt_timestamp_to_string(txn->prepare_timestamp, ts_string[3]),
-      __wt_timestamp_to_string(txn->read_timestamp, ts_string[4]),
-      __wt_timestamp_to_string(txn_shared->pinned_durable_timestamp, ts_string[5]),
-      __wt_timestamp_to_string(txn_shared->pinned_read_timestamp, ts_string[6]),
-      txn->ckpt_lsn.l.file, txn->ckpt_lsn.l.offset, txn->full_ckpt ? "true" : "false",
-      txn->rollback_reason == NULL ? "" : txn->rollback_reason, txn->flags, iso_tag));
+    WT_RET(
+      __wt_snprintf(buf, sizeof(buf),
+        "transaction id: %" PRIu64 ", mod count: %u"
+        ", snap min: %" PRIu64 ", snap max: %" PRIu64 ", snapshot count: %u"
+        ", commit_timestamp: %s"
+        ", durable_timestamp: %s"
+        ", first_commit_timestamp: %s"
+        ", prepare_timestamp: %s"
+        ", read_timestamp: %s"
+        ", pinned_durable_timestamp: %s"
+        ", pinned_read_timestamp: %s"
+        ", checkpoint LSN: [%" PRIu32 "][%" PRIu32 "]"
+        ", full checkpoint: %s"
+        ", rollback reason: %s"
+        ", flags: 0x%08" PRIx32 ", isolation: %s",
+        txn->id, txn->mod_count, txn->snap_min, txn->snap_max, txn->snapshot_count,
+        __wt_timestamp_to_string(txn->commit_timestamp, ts_string[0]),
+        __wt_timestamp_to_string(txn->durable_timestamp, ts_string[1]),
+        __wt_timestamp_to_string(txn->first_commit_timestamp, ts_string[2]),
+        __wt_timestamp_to_string(txn->prepare_timestamp, ts_string[3]),
+        __wt_timestamp_to_string(txn->read_timestamp, ts_string[4]),
+        __wt_timestamp_to_string(txn_shared->pinned_durable_timestamp, ts_string[5]),
+        __wt_timestamp_to_string(txn_shared->pinned_read_timestamp, ts_string[6]),
+        txn->ckpt_lsn.l.file, txn->ckpt_lsn.l.offset, txn->full_ckpt ? "true" : "false",
+        txn->rollback_reason == NULL ? "" : txn->rollback_reason, txn->flags, iso_tag));
 
     /*
      * Log a message and return an error if error code and an optional error string has been passed.
@@ -1888,13 +1890,14 @@ __wt_verbose_dump_update(WT_SESSION_IMPL *session, WT_UPDATE *upd)
         break;
     }
 
-    __wt_errx(session, "transaction id: %" PRIu64
-                       ", commit timestamp: %s"
-                       ", durable timestamp: %s"
-                       ", has next: %s"
-                       ", size: %" PRIu32
-                       ", type: %s"
-                       ", prepare state: %s",
+    __wt_errx(session,
+      "transaction id: %" PRIu64
+      ", commit timestamp: %s"
+      ", durable timestamp: %s"
+      ", has next: %s"
+      ", size: %" PRIu32
+      ", type: %s"
+      ", prepare state: %s",
       upd->txnid, __wt_timestamp_to_string(upd->start_ts, ts_string[0]),
       __wt_timestamp_to_string(upd->durable_ts, ts_string[1]), upd->next == NULL ? "no" : "yes",
       upd->size, upd_type, prepare_state);
