@@ -24,9 +24,20 @@ cd `git rev-parse --show-toplevel` || exit 1
 # Override existing Clang Format versions in the PATH.
 export PATH="${PWD}/dist":$PATH
 
+# If there is no clang-format in the PATH, download it.
+which clang-format >/dev/null 2>&1
+if test $? -ne 0; then
+	download_clang_format
+fi
+
 # Ensure that we have the correct version of clang-format.
-clang_format_version="10.0.0"
-clang-format --version | grep "version $clang_format_version" >/dev/null 2>&1
+desired_version="10.0.0"
+
+# On macOS Catalina, users need to manually approve binaries.
+# If we're not allowed to run clang-format, let's exit (should be obvious from the dialog).
+current_version=`clang-format --version` || exit 1
+
+echo $current_version | grep "version $desired_version" >/dev/null 2>&1
 if test $? -ne 0; then
 	download_clang_format
 fi
